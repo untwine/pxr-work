@@ -1,21 +1,21 @@
-//
 // Copyright 2024 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_BASE_WORK_SORT_H
-#define PXR_BASE_WORK_SORT_H
+// Modified by Jeremy Retailleau.
+
+#ifndef PXR_WORK_SORT_H
+#define PXR_WORK_SORT_H
 
 /// \file
 
-#include "pxr/pxr.h"
-#include "pxr/base/work/threadLimits.h"
+#include "./threadLimits.h"
 
 #include <tbb/parallel_sort.h>
 #include <algorithm>
 
-PXR_NAMESPACE_OPEN_SCOPE
+namespace pxr {
 
 /// Sorts in-place a container that provides begin() and end() methods
 ///
@@ -47,6 +47,6 @@ WorkParallelSort(C* container, const Compare& comp)
     }
 }
 
-PXR_NAMESPACE_CLOSE_SCOPE
+}  // namespace pxr
 
 #endif

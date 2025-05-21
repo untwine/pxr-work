@@ -1,16 +1,13 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-// threadLimits.cpp
-//
+// Modified by Jeremy Retailleau.
 
-#include "pxr/pxr.h"
-#include "pxr/base/work/threadLimits.h"
+#include "./threadLimits.h"
 
-#include "pxr/base/tf/envSetting.h"
+#include <pxr/tf/envSetting.h>
 
 // Blocked range is not used in this file, but this header happens to pull in
 // the TBB version header in a way that works in all TBB versions.
@@ -27,7 +24,7 @@
 #include <algorithm>
 #include <atomic>
 
-PXR_NAMESPACE_USING_DIRECTIVE
+using namespace pxr;
 
 // The environment variable used to limit the number of threads the application
 // may spawn:
@@ -48,7 +45,7 @@ TF_DEFINE_ENV_SETTING(
     "the environment variable (if set to a non-zero value) will override any "
     "value passed to Work thread-limiting API calls.");
 
-PXR_NAMESPACE_OPEN_SCOPE
+namespace pxr {
 
 // We create a global_control or task_scheduler_init instance at static
 // initialization time if PXR_WORK_THREAD_LIMIT is set to a nonzero value.
@@ -217,4 +214,4 @@ WorkHasConcurrency()
     return WorkGetConcurrencyLimit() > 1;
 }
 
-PXR_NAMESPACE_CLOSE_SCOPE
+}  // namespace pxr

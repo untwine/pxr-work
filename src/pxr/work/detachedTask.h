@@ -1,23 +1,23 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_BASE_WORK_DETACHED_TASK_H
-#define PXR_BASE_WORK_DETACHED_TASK_H
+// Modified by Jeremy Retailleau.
+
+#ifndef PXR_WORK_DETACHED_TASK_H
+#define PXR_WORK_DETACHED_TASK_H
 
 /// \file work/detachedTask.h
 
-#include "pxr/pxr.h"
-#include "pxr/base/tf/errorMark.h"
-#include "pxr/base/work/api.h"
-#include "pxr/base/work/dispatcher.h"
+#include <pxr/tf/errorMark.h>
+#include "./api.h"
+#include "./dispatcher.h"
 
 #include <type_traits>
 #include <utility>
 
-PXR_NAMESPACE_OPEN_SCOPE
+namespace pxr {
 
 template <class Fn>
 struct Work_DetachedTask
@@ -55,6 +55,6 @@ void WorkRunDetachedTask(Fn &&fn)
     }
 }
 
-PXR_NAMESPACE_CLOSE_SCOPE
+}  // namespace pxr
 
-#endif // PXR_BASE_WORK_DETACHED_TASK_H
+#endif // PXR_WORK_DETACHED_TASK_H

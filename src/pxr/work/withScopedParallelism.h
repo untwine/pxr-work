@@ -1,24 +1,24 @@
-//
 // Copyright 2021 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_BASE_WORK_WITH_SCOPED_PARALLELISM_H
-#define PXR_BASE_WORK_WITH_SCOPED_PARALLELISM_H
+// Modified by Jeremy Retailleau.
+
+#ifndef PXR_WORK_WITH_SCOPED_PARALLELISM_H
+#define PXR_WORK_WITH_SCOPED_PARALLELISM_H
 
 ///\file work/withScopedParallelism.h
 
-#include "pxr/pxr.h"
-#include "pxr/base/work/api.h"
-#include "pxr/base/work/dispatcher.h"
-#include "pxr/base/tf/pyLock.h"
+#include "./api.h"
+#include "./dispatcher.h"
+#include <pxr/tf/pyLock.h>
 
 #include <tbb/task_arena.h>
 
 #include <utility>
 
-PXR_NAMESPACE_OPEN_SCOPE
+namespace pxr {
 
 /// Invoke \p fn, ensuring that all wait operations on concurrent constructs
 /// invoked by the calling thread only take tasks created within the scope of \p
@@ -125,7 +125,7 @@ WorkWithScopedDispatcher(Fn &&fn, bool dropPythonGIL=true)
     }, dropPythonGIL);
 }
 
-PXR_NAMESPACE_CLOSE_SCOPE
+}  // namespace pxr
 
-#endif // PXR_BASE_WORK_WITH_SCOPED_PARALLELISM_H
+#endif // PXR_WORK_WITH_SCOPED_PARALLELISM_H
 

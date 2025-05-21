@@ -1,22 +1,22 @@
-//
 // Copyright 2018 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_BASE_WORK_REDUCE_H
-#define PXR_BASE_WORK_REDUCE_H
+// Modified by Jeremy Retailleau.
+
+#ifndef PXR_WORK_REDUCE_H
+#define PXR_WORK_REDUCE_H
 
 /// \file work/reduce.h
-#include "pxr/pxr.h"
-#include "pxr/base/work/threadLimits.h"
-#include "pxr/base/work/api.h"
+#include "./threadLimits.h"
+#include "./api.h"
 
 #include <tbb/blocked_range.h>
 #include <tbb/parallel_reduce.h>
 #include <tbb/task_group.h>
 
-PXR_NAMESPACE_OPEN_SCOPE
+namespace pxr {
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -146,6 +146,6 @@ WorkParallelReduceN(
     return WorkParallelReduceN(identity, n, loopCallback, reductionCallback, 1);
 }
 
-PXR_NAMESPACE_CLOSE_SCOPE
+}  // namespace pxr
 
-#endif // PXR_BASE_WORK_REDUCE_H
+#endif // PXR_WORK_REDUCE_H

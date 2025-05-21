@@ -1,20 +1,19 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
+// Modified by Jeremy Retailleau.
 
-#include "pxr/pxr.h"
-#include "pxr/base/work/detachedTask.h"
-#include "pxr/base/work/dispatcher.h"
-#include "pxr/base/work/threadLimits.h"
+#include "./detachedTask.h"
+#include "./dispatcher.h"
+#include "./threadLimits.h"
 
 #include <atomic>
 #include <chrono>
 #include <thread>
 
-PXR_NAMESPACE_OPEN_SCOPE
+namespace pxr {
 
 WorkDispatcher &
 Work_GetDetachedDispatcher()
@@ -57,4 +56,4 @@ Work_EnsureDetachedTaskProgress()
     }
 }
 
-PXR_NAMESPACE_CLOSE_SCOPE
+}  // namespace pxr

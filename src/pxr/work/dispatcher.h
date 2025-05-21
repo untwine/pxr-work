@@ -1,20 +1,20 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_BASE_WORK_DISPATCHER_H
-#define PXR_BASE_WORK_DISPATCHER_H
+// Modified by Jeremy Retailleau.
+
+#ifndef PXR_WORK_DISPATCHER_H
+#define PXR_WORK_DISPATCHER_H
 
 /// \file work/dispatcher.h
 
-#include "pxr/pxr.h"
-#include "pxr/base/work/threadLimits.h"
-#include "pxr/base/work/api.h"
+#include "./threadLimits.h"
+#include "./api.h"
 
-#include "pxr/base/tf/errorMark.h"
-#include "pxr/base/tf/errorTransport.h"
+#include <pxr/tf/errorMark.h>
+#include <pxr/tf/errorTransport.h>
 
 // Blocked range is not used in this file, but this header happens to pull in
 // the TBB version header in a way that works in all TBB versions.
@@ -30,7 +30,7 @@
 #include <type_traits>
 #include <utility>
 
-PXR_NAMESPACE_OPEN_SCOPE
+namespace pxr {
 
 /// \class WorkDispatcher
 ///
@@ -258,6 +258,6 @@ WorkMakeDeprecatedMutableTask(Fn &&fn) {
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PXR_NAMESPACE_CLOSE_SCOPE
+}  // namespace pxr
 
-#endif // PXR_BASE_WORK_DISPATCHER_H
+#endif // PXR_WORK_DISPATCHER_H

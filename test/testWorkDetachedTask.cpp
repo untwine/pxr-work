@@ -1,19 +1,19 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#include "pxr/pxr.h"
-#include "pxr/base/work/detachedTask.h"
-#include "pxr/base/work/utils.h"
+// Modified by Jeremy Retailleau.
+
+#include <pxr/work/detachedTask.h>
+#include <pxr/work/utils.h>
 
 #include <atomic>
 #include <cstdio>
 #include <thread>
 
 
-PXR_NAMESPACE_USING_DIRECTIVE
+using namespace pxr;
 
 struct _Tester {
     _Tester() = default;

@@ -1,21 +1,20 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_BASE_WORK_SINGULAR_TASK_H
-#define PXR_BASE_WORK_SINGULAR_TASK_H
+// Modified by Jeremy Retailleau.
+
+#ifndef PXR_WORK_SINGULAR_TASK_H
+#define PXR_WORK_SINGULAR_TASK_H
 
 /// \file work/singularTask.h
-
-#include "pxr/pxr.h"
 
 #include <atomic>
 #include <functional>
 #include <type_traits>
 
-PXR_NAMESPACE_OPEN_SCOPE
+namespace pxr {
 
 class WorkDispatcher;
 
@@ -112,6 +111,6 @@ private:
     std::atomic_size_t _count;
 };
 
-PXR_NAMESPACE_CLOSE_SCOPE
+}  // namespace pxr
 
-#endif // PXR_BASE_WORK_SINGULAR_TASK_H
+#endif // PXR_WORK_SINGULAR_TASK_H

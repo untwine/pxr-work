@@ -1,18 +1,17 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
+// Modified by Jeremy Retailleau.
 
-#include "pxr/pxr.h"
-#include "pxr/base/work/threadLimits.h"
+#include <pxr/work/threadLimits.h>
 
-#include "pxr/external/boost/python/def.hpp"
+#include <pxr/boost/python/def.hpp>
 
-PXR_NAMESPACE_USING_DIRECTIVE
+using namespace pxr;
 
-using namespace pxr_boost::python;
+using namespace pxr::boost::python;
 
 void wrapThreadLimits()
 {

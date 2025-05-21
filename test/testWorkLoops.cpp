@@ -1,19 +1,18 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
+// Modified by Jeremy Retailleau.
 
-#include "pxr/pxr.h"
-#include "pxr/base/work/loops.h"
+#include <pxr/work/loops.h>
 
-#include "pxr/base/work/threadLimits.h"
+#include <pxr/work/threadLimits.h>
 
-#include "pxr/base/tf/stopwatch.h"
-#include "pxr/base/tf/iterator.h"
-#include "pxr/base/tf/staticData.h"
-#include "pxr/base/arch/fileSystem.h"
+#include <pxr/tf/stopwatch.h>
+#include <pxr/tf/iterator.h>
+#include <pxr/tf/staticData.h>
+#include <pxr/arch/fileSystem.h>
 
 #include <functional>
 
@@ -25,7 +24,7 @@
 
 using namespace std::placeholders;
 
-PXR_NAMESPACE_USING_DIRECTIVE
+using namespace pxr;
 
 static void
 _Double(size_t begin, size_t end, std::vector<int> *v)

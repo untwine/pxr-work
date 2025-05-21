@@ -1,16 +1,16 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_BASE_WORK_THREAD_LIMITS_H
-#define PXR_BASE_WORK_THREAD_LIMITS_H
+// Modified by Jeremy Retailleau.
 
-#include "pxr/pxr.h"
-#include "pxr/base/work/api.h"
+#ifndef PXR_WORK_THREAD_LIMITS_H
+#define PXR_WORK_THREAD_LIMITS_H
 
-PXR_NAMESPACE_OPEN_SCOPE
+#include "./api.h"
+
+namespace pxr {
 
 /// \file work/threadLimits.h
 
@@ -81,6 +81,6 @@ WORK_API void WorkSetConcurrencyLimitArgument(int n);
 ///
 WORK_API void WorkSetMaximumConcurrencyLimit();
 
-PXR_NAMESPACE_CLOSE_SCOPE
+}  // namespace pxr
 
 #endif

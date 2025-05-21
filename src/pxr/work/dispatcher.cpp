@@ -1,14 +1,13 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
+// Modified by Jeremy Retailleau.
 
-#include "pxr/pxr.h"
-#include "pxr/base/work/dispatcher.h"
+#include "./dispatcher.h"
 
-PXR_NAMESPACE_OPEN_SCOPE
+namespace pxr {
 
 WorkDispatcher::WorkDispatcher()
     : _context(
@@ -107,4 +106,4 @@ WorkDispatcher::_TransportErrors(const TfErrorMark &mark,
     errors->grow_by(1)->swap(transport);
 }
 
-PXR_NAMESPACE_CLOSE_SCOPE
+}  // namespace pxr

@@ -1,16 +1,15 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
+// Modified by Jeremy Retailleau.
 
-#include "pxr/pxr.h"
-#include "pxr/base/work/loops.h"
-#include "pxr/base/work/threadLimits.h"
-#include "pxr/base/tf/diagnostic.h"
-#include "pxr/base/tf/getenv.h"
-#include "pxr/base/tf/staticData.h"
+#include <pxr/work/loops.h>
+#include <pxr/work/threadLimits.h>
+#include <pxr/tf/diagnostic.h>
+#include <pxr/tf/getenv.h>
+#include <pxr/tf/staticData.h>
 
 #include <algorithm>
 #include <functional>
@@ -27,7 +26,7 @@
 
 using namespace std::placeholders;
 
-PXR_NAMESPACE_USING_DIRECTIVE
+using namespace pxr;
 
 static TfStaticData< std::set<std::thread::id> > _uniqueThreads;
 static TfStaticData< std::mutex > _uniqueThreadsMutex;

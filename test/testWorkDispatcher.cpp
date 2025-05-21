@@ -1,15 +1,14 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
+// Modified by Jeremy Retailleau.
 
-#include "pxr/pxr.h"
-#include "pxr/base/work/dispatcher.h"
+#include <pxr/work/dispatcher.h>
 
-#include "pxr/base/tf/iterator.h"
-#include "pxr/base/tf/stopwatch.h"
+#include <pxr/tf/iterator.h>
+#include <pxr/tf/stopwatch.h>
 
 #include <atomic>
 #include <chrono>
@@ -19,7 +18,7 @@
 #include <thread>
 #include <vector>
 
-PXR_NAMESPACE_USING_DIRECTIVE
+using namespace pxr;
 
 static const int numLevels =100; 
 static const int numNodesPerLevel = 1000;

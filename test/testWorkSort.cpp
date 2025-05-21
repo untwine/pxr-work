@@ -1,25 +1,23 @@
-//
 // Copyright 2024 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
+// Modified by Jeremy Retailleau.
 
-#include "pxr/pxr.h"
+#include <pxr/work/sort.h>
+#include <pxr/work/threadLimits.h>
 
-#include "pxr/base/work/sort.h"
-#include "pxr/base/work/threadLimits.h"
-
-#include "pxr/base/arch/fileSystem.h"
-#include "pxr/base/tf/diagnostic.h"
-#include "pxr/base/tf/stopwatch.h"
+#include <pxr/arch/fileSystem.h>
+#include <pxr/tf/diagnostic.h>
+#include <pxr/tf/stopwatch.h>
 
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
 #include <vector>
 
-PXR_NAMESPACE_USING_DIRECTIVE
+using namespace pxr;
 
 static void
 _PopulateVector(size_t arraySize, std::vector<int>* v)

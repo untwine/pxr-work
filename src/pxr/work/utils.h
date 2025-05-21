@@ -1,21 +1,21 @@
-//
 // Copyright 2016 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_BASE_WORK_UTILS_H
-#define PXR_BASE_WORK_UTILS_H
+// Modified by Jeremy Retailleau.
+
+#ifndef PXR_WORK_UTILS_H
+#define PXR_WORK_UTILS_H
 
 ///\file work/utils.h
 
-#include "pxr/pxr.h"
-#include "pxr/base/work/api.h"
-#include "pxr/base/work/detachedTask.h"
+#include "./api.h"
+#include "./detachedTask.h"
 
 #include <utility>
 
-PXR_NAMESPACE_OPEN_SCOPE
+namespace pxr {
 
 WORK_API
 bool Work_ShouldSynchronizeAsyncDestroyCalls();
@@ -82,6 +82,6 @@ void WorkMoveDestroyAsync(T &obj)
         WorkRunDetachedTask(std::move(helper));
 }
 
-PXR_NAMESPACE_CLOSE_SCOPE
+}  // namespace pxr
 
-#endif // PXR_BASE_WORK_UTILS_H
+#endif // PXR_WORK_UTILS_H

@@ -1,13 +1,14 @@
-//
 // Copyright 2017 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_BASE_WORK_API_H
-#define PXR_BASE_WORK_API_H
+// Modified by Jeremy Retailleau.
 
-#include "pxr/base/arch/export.h"
+#ifndef PXR_WORK_API_H
+#define PXR_WORK_API_H
+
+#include <pxr/arch/export.h>
 
 #if defined(PXR_STATIC)
 #   define WORK_API
