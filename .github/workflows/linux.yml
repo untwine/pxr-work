@@ -1,0 +1,65 @@
+name: test-linux
+
+on:
+  push:
+    branches: [ dev, main ]
+
+  # Run tests once a week on Sunday.
+  schedule:
+    - cron: "0 6 * * 0"
+
+permissions:
+  contents: read
+
+env:
+  CMAKE_BUILD_TYPE: Release
+  CMAKE_GENERATOR: Ninja
+  CTEST_OUTPUT_ON_FAILURE: True
+
+jobs:
+  test-linux:
+    name: test-${{ matrix.os }}
+    runs-on: ${{ matrix.runs-on }}
+    strategy:
+      matrix:
+        os: [ linux-intel, linux-arm ]
+        include:
+          - os: linux-intel
+            runs-on: ubuntu-latest
+          - os: linux-arm
+            runs-on: ubuntu-24.04-arm
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: 3.12
+
+      - name: Create Build Environment
+        run: |
+          sudo apt update
+          sudo apt install -y ninja-build
+          cmake -E make_directory ${{github.workspace}}/build
+          python -m pip install pytest-cmake
+
+      - name: Install Building Dependencies
+        uses: ./.github/actions/building-deps
+        with:
+          oneTBB: 2021.12.0
+          path: ${HOME}/.local
+
+      - name: Configure
+        working-directory: ${{github.workspace}}/build
+        run: cmake ..
+
+      - name: Build
+        working-directory: ${{github.workspace}}/build
+        run: cmake --build . --config Release
+
+      - name: Test
+        working-directory: ${{github.workspace}}/build
+        run: |
+          export LD_LIBRARY_PATH=${HOME}/.local/lib:${LD_LIBRARY_PATH}
+          export PYTHONPATH=${HOME}/.local/lib/python3.12/site-packages:${PYTHONPATH}
+          ctest -VV -C Release

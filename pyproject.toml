@@ -1,0 +1,50 @@
+[build-system]
+requires = [
+    "scikit-build-core",
+    "pxr-tf-dev==25.5.1.*",
+    "pxr-trace-dev==25.5.1.*",
+    "pxr-boost-dev==25.5.1.*",
+    "pxr-tbb-dev==2022.1.0.*"
+]
+build-backend = "scikit_build_core.build"
+
+[project]
+name = "pxr-work"
+version = "25.5.1"
+description = "Multi-threaded dispatch library used in OpenUSD"
+readme = "README.md"
+requires-python = ">=3.8"
+license-files = ["LICENSE.txt", "NOTICE.txt"]
+keywords = ["pixar", "open-usd"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows :: Windows 10",
+]
+dependencies = [
+    "pxr-tf==25.5.1.*",
+    "pxr-trace==25.5.1.*",
+    "pxr-boost==25.5.1.*",
+    "pxr-tbb==2022.1.0.*"
+]
+
+[project.urls]
+Repository = "https://github.com/untwine/pxr-work"
+
+[tool.scikit-build]
+cmake.version = ">=3.21,<4"
+cmake.args = [
+    "-DBUILD_TESTS=OFF",
+    "-DBUILD_SHARED_LIBS=ON",
+    "-DBUILD_PYTHON_BINDINGS=ON",
+    "-DCMAKE_INSTALL_LIBDIR=pxr/.libs",
+    "-DCMAKE_INSTALL_INCLUDEDIR=pxr-work/include",
+    "-DCMAKE_INSTALL_DATAROOTDIR=pxr-work",
+    "-DCMAKE_INSTALL_PYTHON_LIBDIR=.",
+
+    # Aligned operator delete (used by TBB) requires macOS 10.13+
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.13"
+]
+wheel.exclude = ["pxr-work"]
+sdist.exclude = ["test", ".github"]

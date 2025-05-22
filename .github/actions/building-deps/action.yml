@@ -1,0 +1,90 @@
+name: building-deps
+description: "Install Build Dependencies"
+
+inputs:
+  onetbb:
+    description: "oneTBB version targeted"
+
+  path:
+    description: "Path to install dependencies into"
+
+runs:
+  using: composite
+  steps:
+    - name: Install conan
+      shell: bash
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install conan==2.*
+        conan profile detect
+        conan profile show
+
+    - name: Install oneTBB
+      shell: bash
+      working-directory: ${{runner.temp}}
+      run: |
+        conan install \
+        --requires onetbb/${{ inputs.onetbb }} \
+        --output-folder="${{ inputs.path }}" \
+        --options=*:shared=True \
+        --generator=CMakeDeps \
+        --build=missing \
+        --deployer=runtime_deploy \
+        --deployer-folder="${{ inputs.path }}/lib"
+
+    - name: Build Pxr Arch
+      shell: bash
+      working-directory: ${{runner.temp}}
+      run: |
+        git clone https://github.com/untwine/pxr-arch.git
+        cmake -S pxr-arch -B pxr-arch-build \
+          -D "BUILD_DOCS=OFF" \
+          -D "BUILD_TESTS=OFF" \
+          -D "CMAKE_INSTALL_PREFIX=${{ inputs.path }}"
+        cmake --build pxr-arch-build --config Release --target install
+
+    - name: Build Pxr Boost Python
+      shell: bash
+      working-directory: ${{runner.temp}}
+      run: |
+        git clone https://github.com/untwine/pxr-boost.git
+        cmake -S pxr-boost -B pxr-boost-build \
+          -D "BUILD_DOCS=OFF" \
+          -D "BUILD_TESTS=OFF" \
+          -D "CMAKE_INSTALL_PREFIX=${{ inputs.path }}"
+        cmake --build pxr-boost-build --config Release --target install
+
+    - name: Build Pxr Tf
+      shell: bash
+      working-directory: ${{runner.temp}}
+      run: |
+        git clone https://github.com/untwine/pxr-tf.git
+        cmake -S pxr-tf -B pxr-tf-build \
+          -D "BUILD_DOCS=OFF" \
+          -D "BUILD_TESTS=OFF" \
+          -D "BUILD_PYTHON_BINDINGS=ON" \
+          -D "CMAKE_INSTALL_PREFIX=${{ inputs.path }}"
+        cmake --build pxr-tf-build --config Release --target install
+
+    - name: Build Pxr Js
+      shell: bash
+      working-directory: ${{runner.temp}}
+      run: |
+        git clone https://github.com/untwine/pxr-js.git
+        cmake -S pxr-js -B pxr-js-build \
+          -D "BUILD_DOCS=OFF" \
+          -D "BUILD_TESTS=OFF" \
+          -D "CMAKE_INSTALL_PREFIX=${{ inputs.path }}"
+        cmake --build pxr-js-build --config Release --target install
+
+    - name: Build Pxr Trace
+      shell: bash
+      working-directory: ${{runner.temp}}
+      run: |
+        git clone https://github.com/untwine/pxr-trace.git
+        cmake -S pxr-trace -B pxr-trace-build \
+          -D "BUILD_DOCS=OFF" \
+          -D "BUILD_TESTS=OFF" \
+          -D "BUILD_PYTHON_BINDINGS=ON" \
+          -D "CMAKE_INSTALL_PREFIX=${{ inputs.path }}"
+        cmake --build pxr-trace-build --config Release --target install
