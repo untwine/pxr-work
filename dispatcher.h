@@ -17,16 +17,6 @@
 #include "pxr/base/tf/errorMark.h"
 #include "pxr/base/tf/errorTransport.h"
 
-// Blocked range is not used in this file, but this header happens to pull in
-// the TBB version header in a way that works in all TBB versions.
-#include <tbb/blocked_range.h>
-#include <tbb/concurrent_vector.h>
-#if TBB_INTERFACE_VERSION_MAJOR >= 12
-#include <tbb/task_group.h>
-#else
-#include <tbb/task.h>
-#endif
-
 #include <functional>
 #include <type_traits>
 #include <utility>
