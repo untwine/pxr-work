@@ -1,4 +1,3 @@
-
 //
 // Copyright 2025 Pixar
 //
@@ -8,7 +7,7 @@
 #include "pxr/pxr.h"
 #include "pxr/base/arch/hints.h"
 
-#include "pxr/base/work/workTBB/detachedTask.h"
+#include "pxr/base/work/workTBB/detachedTask_impl.h"
 
 #include <atomic>
 #include <chrono>

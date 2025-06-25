@@ -4,10 +4,8 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_BASE_WORK_TBB_WITH_SCOPED_PARALLELISM_H
-#define PXR_BASE_WORK_TBB_WITH_SCOPED_PARALLELISM_H
-
-///\file workTBB/withScopedParallelism.h
+#ifndef PXR_BASE_WORK_TBB_WITH_SCOPED_PARALLELISM_IMPL_H
+#define PXR_BASE_WORK_TBB_WITH_SCOPED_PARALLELISM_IMPL_H
 
 #include <tbb/task_arena.h>
 
@@ -30,5 +28,5 @@ WorkImpl_WithScopedParallelism(Fn &&fn)
 
 PXR_NAMESPACE_CLOSE_SCOPE
 
-#endif // PXR_BASE_WORK_TBB_WITH_SCOPED_PARALLELISM_H
+#endif // PXR_BASE_WORK_TBB_WITH_SCOPED_PARALLELISM_IMPL_H
 

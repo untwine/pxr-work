@@ -4,11 +4,9 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-// workTBB/threadLimits.cpp
-//
 #include "pxr/pxr.h"
 
-#include "pxr/base/work/workTBB/threadLimits.h"
+#include "pxr/base/work/workTBB/threadLimits_impl.h"
 
 // Blocked range is not used in this file, but this header happens to pull in
 // the TBB version header in a way that works in all TBB versions.

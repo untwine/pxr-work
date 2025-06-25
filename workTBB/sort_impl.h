@@ -4,10 +4,8 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_BASE_WORK_TBB_SORT_H
-#define PXR_BASE_WORK_TBB_SORT_H
-
-/// \file workTBB/sort.h
+#ifndef PXR_BASE_WORK_TBB_SORT_IMPL_H
+#define PXR_BASE_WORK_TBB_SORT_IMPL_H
 
 #include "pxr/pxr.h"
 
@@ -38,4 +36,4 @@ WorkImpl_ParallelSort(C* container, const Compare& comp)
 
 PXR_NAMESPACE_CLOSE_SCOPE
 
-#endif
+#endif // PXR_BASE_WORK_TBB_SORT_IMPL_H

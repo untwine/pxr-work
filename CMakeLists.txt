@@ -15,9 +15,9 @@ pxr_library(work
         taskGraph
         threadLimits
         utils
-        workTBB/detachedTask
-        workTBB/dispatcher
-        workTBB/threadLimits
+        workTBB/detachedTask_impl
+        workTBB/dispatcher_impl
+        workTBB/threadLimits_impl
 
     PUBLIC_HEADERS
         api.h
@@ -25,10 +25,10 @@ pxr_library(work
         sort.h
         withScopedParallelism.h
         workTBB/impl.h
-        workTBB/loops.h
-        workTBB/reduce.h
-        workTBB/sort.h
-        workTBB/withScopedParallelism.h
+        workTBB/loops_impl.h
+        workTBB/reduce_impl.h
+        workTBB/sort_impl.h
+        workTBB/withScopedParallelism_impl.h
         zeroAllocator.h
 
     PYMODULE_CPPFILES

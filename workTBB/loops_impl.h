@@ -4,10 +4,9 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-#ifndef PXR_BASE_WORK_TBB_LOOPS_H
-#define PXR_BASE_WORK_TBB_LOOPS_H
+#ifndef PXR_BASE_WORK_TBB_LOOPS_IMPL_H
+#define PXR_BASE_WORK_TBB_LOOPS_IMPL_H
 
-/// \file work/loops.h
 #include "pxr/pxr.h"
 
 #include <tbb/blocked_range.h>
@@ -64,4 +63,4 @@ WorkImpl_ParallelForEach(
 
 PXR_NAMESPACE_CLOSE_SCOPE
 
-#endif // PXR_BASE_WORK_TBB_LOOPS_H
+#endif // PXR_BASE_WORK_TBB_LOOPS_IMPL_H

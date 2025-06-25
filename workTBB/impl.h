@@ -7,16 +7,14 @@
 #ifndef PXR_BASE_WORK_TBB_IMPL_H
 #define PXR_BASE_WORK_TBB_IMPL_H
 
-/// \file workTBB/impl.h
-
 /// This file pulls in the entire work implementation
 
-#include "pxr/base/work/workTBB/detachedTask.h"
-#include "pxr/base/work/workTBB/dispatcher.h"
-#include "pxr/base/work/workTBB/loops.h"
-#include "pxr/base/work/workTBB/reduce.h"
-#include "pxr/base/work/workTBB/sort.h"
-#include "pxr/base/work/workTBB/threadLimits.h"
-#include "pxr/base/work/workTBB/withScopedParallelism.h"
+#include "pxr/base/work/workTBB/detachedTask_impl.h"
+#include "pxr/base/work/workTBB/dispatcher_impl.h"
+#include "pxr/base/work/workTBB/loops_impl.h"
+#include "pxr/base/work/workTBB/reduce_impl.h"
+#include "pxr/base/work/workTBB/sort_impl.h"
+#include "pxr/base/work/workTBB/threadLimits_impl.h"
+#include "pxr/base/work/workTBB/withScopedParallelism_impl.h"
 
 #endif // PXR_BASE_WORK_TBB_IMPL_H

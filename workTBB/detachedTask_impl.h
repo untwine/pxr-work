@@ -4,14 +4,11 @@
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-
-#ifndef PXR_BASE_WORK_TBB_DETACHED_TASK_H
-#define PXR_BASE_WORK_TBB_DETACHED_TASK_H
-
-/// \file work/detachedTask.h
+#ifndef PXR_BASE_WORK_TBB_DETACHED_TASK_IMPL_H
+#define PXR_BASE_WORK_TBB_DETACHED_TASK_IMPL_H
 
 #include <tbb/blocked_range.h>
-#include "pxr/base/work/workTBB/dispatcher.h"
+#include "pxr/base/work/workTBB/dispatcher_impl.h"
 #include "pxr/base/work/api.h"
 
 #if TBB_INTERFACE_VERSION_MAJOR >= 12
@@ -43,4 +40,4 @@ inline void WorkImpl_RunDetachedTask(Fn &&fn){
 
 PXR_NAMESPACE_CLOSE_SCOPE
 
-#endif // PXR_BASE_WORK_TBB_DETACHED_TASK_H
+#endif // PXR_BASE_WORK_TBB_DETACHED_TASK_IMPL_H
