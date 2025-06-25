@@ -12,6 +12,7 @@ pxr_library(work
         loops
         reduce
         singularTask
+        taskGraph
         threadLimits
         utils
         workTBB/detachedTask
@@ -28,6 +29,7 @@ pxr_library(work
         workTBB/reduce.h
         workTBB/sort.h
         workTBB/withScopedParallelism.h
+        zeroAllocator.h
 
     PYMODULE_CPPFILES
         module.cpp
