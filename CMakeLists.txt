@@ -9,9 +9,6 @@ pxr_library(work
 
     PUBLIC_CLASSES
         dispatcher
-        loops
-        reduce
-        singularTask
         taskGraph
         threadLimits
         utils
@@ -22,6 +19,9 @@ pxr_library(work
     PUBLIC_HEADERS
         api.h
         detachedTask.h
+        loops.h
+        reduce.h
+        singularTask.h
         sort.h
         withScopedParallelism.h
         workTBB/impl.h
