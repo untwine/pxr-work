@@ -14,6 +14,7 @@
 #include "pxr/base/work/workTBB/loops_impl.h"
 #include "pxr/base/work/workTBB/reduce_impl.h"
 #include "pxr/base/work/workTBB/sort_impl.h"
+#include "pxr/base/work/workTBB/taskGraph_impl.h"
 #include "pxr/base/work/workTBB/threadLimits_impl.h"
 #include "pxr/base/work/workTBB/withScopedParallelism_impl.h"
 

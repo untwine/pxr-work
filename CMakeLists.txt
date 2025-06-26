@@ -10,10 +10,12 @@ pxr_library(work
     PUBLIC_CLASSES
         dispatcher
         taskGraph
+        taskGraph_defaultImpl
         threadLimits
         utils
         workTBB/detachedTask_impl
         workTBB/dispatcher_impl
+        workTBB/taskGraph_impl
         workTBB/threadLimits_impl
 
     PUBLIC_HEADERS
