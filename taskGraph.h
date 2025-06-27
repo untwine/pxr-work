@@ -145,7 +145,7 @@ public:
     /// of this child has been transferred to the continuation task.   
     template <typename C, typename ... Args>
     C * AllocateContinuingChild(Args&&... args) {
-        return _Base::AllocateChild<C>(std::forward<Args>(args)...);
+        return _Base::AllocateContinuingChild<C>(std::forward<Args>(args)...);
     }
 
 protected:
