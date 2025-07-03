@@ -12,7 +12,7 @@
 #include "pxr/pxr.h"
 #include "pxr/base/work/api.h"
 #include "pxr/base/work/dispatcher.h"
-#include "pxr/base/work/workTBB/impl.h"
+#include "pxr/base/work/impl.h"
 #include "pxr/base/tf/pyLock.h"
 
 

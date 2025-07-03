@@ -10,8 +10,8 @@
 /// \file work/sort.h
 
 #include "pxr/pxr.h"
+#include "pxr/base/work/impl.h"
 #include "pxr/base/work/threadLimits.h"
-#include "pxr/base/work/workTBB/impl.h"
 
 #include <algorithm>
 

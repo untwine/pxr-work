@@ -11,8 +11,8 @@
 
 #include "pxr/base/work/api.h"
 #include "pxr/base/work/dispatcher.h"
+#include "pxr/base/work/impl.h"
 #include "pxr/base/work/taskGraph_defaultImpl.h"
-#include "pxr/base/work/workTBB/impl.h"
 
 #include <tbb/enumerable_thread_specific.h>
 

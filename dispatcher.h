@@ -10,9 +10,9 @@
 /// \file
 
 #include "pxr/pxr.h"
-#include "pxr/base/work/threadLimits.h"
 #include "pxr/base/work/api.h"
-#include "pxr/base/work/workTBB/impl.h"
+#include "pxr/base/work/impl.h"
+#include "pxr/base/work/threadLimits.h"
 
 #include "pxr/base/tf/errorMark.h"
 #include "pxr/base/tf/errorTransport.h"

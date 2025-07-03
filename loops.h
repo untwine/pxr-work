@@ -9,9 +9,9 @@
 
 /// \file work/loops.h
 #include "pxr/pxr.h"
-#include "pxr/base/work/threadLimits.h"
 #include "pxr/base/work/api.h"
-#include "pxr/base/work/workTBB/impl.h"
+#include "pxr/base/work/impl.h"
+#include "pxr/base/work/threadLimits.h"
 
 PXR_NAMESPACE_OPEN_SCOPE
 
