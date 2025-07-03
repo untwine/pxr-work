@@ -134,32 +134,7 @@ public:
         return _Base::AllocateChild<F>(std::forward<Args>(args)...);
     }
 
-    /// Construct a new subtask of a continuation task and refrain from 
-    /// incrementing the reference count of the calling task, since ownership 
-    /// of this child has been transferred to the continuation task.   
-    template <typename C, typename ... Args>
-    C * AllocateContinuingChild(Args&&... args) {
-        return _Base::AllocateContinuingChild<C>(std::forward<Args>(args)...);
-    }
-
 protected:
-    /// Allocate a continuation task with \p refCount children. 
-    /// 
-    /// Continuation passing provides an alternative to the task-blocking style 
-    /// of execution that results from recursively spawning children and 
-    /// waiting for them to complete (e.g. the common fork-join pattern). 
-    /// Continuation passing reduces overhead and mitigates the latency 
-    /// introduced by work stealing by re-parenting a continuation task under 
-    /// children that are about to be spawned. 
-    /// 
-    /// \note Consider continuation passing if reducing the growth of the stack 
-    /// is desirable at the cost of growing the heap. 
-    template <typename C, typename... Args>
-    C * _AllocateContinuation(int refCount, Args&&... args) {
-        return _Base::_AllocateContinuation<C>(
-            refCount, std::forward<Args>(args)...);
-    }
-
     /// Recycles this as a continuation task to mitigate the allocation 
     /// overhead of the continuation task.
     /// 
@@ -173,14 +148,6 @@ protected:
         _Base::_RecycleAsContinuation();
     }
 
-    /// Recycles this as a child of continuation task \p c. 
-    ///
-    /// Mitigates allocation/deallocation overhead by reparenting this under 
-    /// \p c. 
-    template <typename C>
-    void _RecycleAsChildOf(C &c) {
-        _Base::_RecycleAsChildOf(c);
-    }
 };
 
 

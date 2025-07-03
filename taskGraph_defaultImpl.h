@@ -71,51 +71,19 @@ public:
     template <typename F, typename ... Args>
     F * AllocateChild(Args&&... args) {
         AddChildReference();
-        return _AllocateChildImpl<F>(std::forward<Args>(args)...);
-    }
-
-    template <typename C, typename ... Args>
-    C * AllocateContinuingChild(Args&&... args) {
-        return _AllocateChildImpl<C>(std::forward<Args>(args)...);
+        F* obj = new F{std::forward<Args>(args)...};
+        obj->_parent = this;
+        return obj;
     }
 
 protected:
-    template <typename C, typename... Args>
-    C * _AllocateContinuation(int refCount, Args&&... args) {
-        C* continuation = new C{std::forward<Args>(args)...};
-        continuation->_ResetParent(_ResetParent());
-        continuation->_childCount = refCount;
-        return continuation;
-    }
-
     void _RecycleAsContinuation() {
         _recycle = true;
-    }
-
-    template <typename C>
-    void _RecycleAsChildOf(C &c) {
-        _recycle = true;
-        _ResetParent(&c);
     }
 
 private:
     // Befriend the task graph that owns instances of this class. 
     friend class WorkTaskGraph_DefaultImpl;
-
-    // Allocates a child of this task. 
-    template <typename F, typename... Args>
-    F* _AllocateChildImpl(Args&&... args) {
-        F* obj = new F{std::forward<Args>(args)...};
-        obj->_ResetParent(this);
-        return obj;
-    }
-
-    // Reparent this task under \p ptr
-    BaseTask * _ResetParent(BaseTask *ptr = nullptr) {
-        BaseTask * p = _parent;
-        _parent = ptr;
-        return p;
-    }
 
     // Set the back-pointer to this task's owning task graph. 
     void _SetTaskGraph(WorkTaskGraph_DefaultImpl * const taskGraph) {

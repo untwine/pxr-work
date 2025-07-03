@@ -83,28 +83,11 @@ public:
             F{std::forward<Args>(args)...};
     }
 
-    template <typename F, typename... Args>
-    F * AllocateContinuingChild(Args &&...args) {
-        return new (allocate_child()) F{std::forward<Args>(args)...};
-    }
-
 protected:
-    template <typename C, typename... Args>
-    C * _AllocateContinuation(int refCount, Args&&... args) {
-        C* continuation = new (tbb::task::allocate_continuation()) 
-            C{std::forward<Args>(args)...};
-        continuation->set_ref_count(refCount);
-        return continuation;
-    }
-
     void _RecycleAsContinuation() {
         recycle_as_safe_continuation();
     }
 
-    template <typename C>
-    void _RecycleAsChildOf(C &c) {
-        tbb::task::recycle_as_child_of(c);
-    }
 };
 
 template <typename F, typename ... Args>
