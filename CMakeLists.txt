@@ -15,12 +15,14 @@ pxr_library(work
         utils
         workTBB/detachedTask_impl
         workTBB/dispatcher_impl
+        workTBB/isolatingDispatcher_impl
         workTBB/taskGraph_impl
         workTBB/threadLimits_impl
 
     PUBLIC_HEADERS
         api.h
         detachedTask.h
+        isolatingDispatcher.h
         loops.h
         reduce.h
         singularTask.h

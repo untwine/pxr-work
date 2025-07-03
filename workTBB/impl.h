@@ -11,6 +11,7 @@
 
 #include "pxr/base/work/workTBB/detachedTask_impl.h"
 #include "pxr/base/work/workTBB/dispatcher_impl.h"
+#include "pxr/base/work/workTBB/isolatingDispatcher_impl.h"
 #include "pxr/base/work/workTBB/loops_impl.h"
 #include "pxr/base/work/workTBB/reduce_impl.h"
 #include "pxr/base/work/workTBB/sort_impl.h"
