@@ -38,7 +38,7 @@ class WorkTaskGraph
 private:
     // Select underlying implementation.
 #if defined WORK_IMPL_HAS_TASK_GRAPH
-    using _Impl = WorkImpl_TaskGraph;
+    using _Impl = PXR_WORK_IMPL_NS::WorkImpl_TaskGraph;
 #else
     using _Impl = WorkTaskGraph_DefaultImpl;
 #endif

@@ -8,6 +8,8 @@
 #include "pxr/pxr.h"
 #include "pxr/base/work/dispatcher.h"
 
+PXR_WORK_IMPL_NAMESPACE_USING_DIRECTIVE
+
 PXR_NAMESPACE_OPEN_SCOPE
 
 template <class Impl>
@@ -70,9 +72,9 @@ Work_Dispatcher<Impl>::_TransportErrors(const TfErrorMark &mark,
 }
 
 // Explicitly instantiate Work_Dispatchers
-template class Work_Dispatcher<WorkImpl_Dispatcher>;
+template class Work_Dispatcher<PXR_WORK_IMPL_NS::WorkImpl_Dispatcher>;
 #if defined WORK_IMPL_HAS_ISOLATING_DISPATCHER
-template class Work_Dispatcher<WorkImpl_IsolatingDispatcher>;
+template class Work_Dispatcher<PXR_WORK_IMPL_NS::WorkImpl_IsolatingDispatcher>;
 #endif
 
 PXR_NAMESPACE_CLOSE_SCOPE

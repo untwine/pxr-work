@@ -46,11 +46,11 @@ PXR_NAMESPACE_OPEN_SCOPE
 /// 
 class WorkIsolatingDispatcher :
 #if defined WORK_IMPL_HAS_ISOLATING_DISPATCHER
-    public Work_Dispatcher<WorkImpl_IsolatingDispatcher>
+    public Work_Dispatcher<PXR_WORK_IMPL_NS::WorkImpl_IsolatingDispatcher>
 #else
-    public Work_Dispatcher<WorkImpl_Dispatcher>
+    public Work_Dispatcher<PXR_WORK_IMPL_NS::WorkImpl_Dispatcher>
 #endif
-    {};
+{};
 
 PXR_NAMESPACE_CLOSE_SCOPE
 

@@ -89,7 +89,7 @@ WorkParallelReduceN(
 
     // Don't bother with parallel_reduce, if concurrency is limited to 1.
     if (WorkHasConcurrency()) {
-
+        PXR_WORK_IMPL_NAMESPACE_USING_DIRECTIVE;
         return WorkImpl_ParallelReduceN(
             identity,
             n,

@@ -99,6 +99,8 @@ template <class Fn>
 auto
 WorkWithScopedParallelism(Fn &&fn, bool dropPythonGIL=true)
 {
+    PXR_WORK_IMPL_NAMESPACE_USING_DIRECTIVE;
+
     if (dropPythonGIL) {
         TF_PY_ALLOW_THREADS_IN_SCOPE();
         return WorkImpl_WithScopedParallelism(std::forward<Fn>(fn));

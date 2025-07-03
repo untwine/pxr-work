@@ -25,6 +25,7 @@ WorkParallelSort(C* container)
 {
     // Don't bother with parallel_for, if concurrency is limited to 1.
     if (WorkHasConcurrency()) {
+        PXR_WORK_IMPL_NAMESPACE_USING_DIRECTIVE;
         WorkImpl_ParallelSort(container);
     }else{
         std::sort(container->begin(), container->end());
@@ -41,6 +42,7 @@ WorkParallelSort(C* container, const Compare& comp)
 {
     // Don't bother with parallel_for, if concurrency is limited to 1.
     if (WorkHasConcurrency()) {
+        PXR_WORK_IMPL_NAMESPACE_USING_DIRECTIVE;
         WorkImpl_ParallelSort(container, comp);
     }else{
         std::sort(container->begin(), container->end(), comp);

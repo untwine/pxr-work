@@ -42,6 +42,7 @@ void WorkRunDetachedTask(Fn &&fn)
     using FnType = typename std::remove_reference<Fn>::type;
     Work_DetachedTask<FnType> task(std::forward<Fn>(fn));
     if (WorkHasConcurrency()) {
+        PXR_WORK_IMPL_NAMESPACE_USING_DIRECTIVE;
         WorkImpl_RunDetachedTask<Work_DetachedTask<FnType>>(std::move(task));
     }
     else {

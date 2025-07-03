@@ -19,4 +19,9 @@
 #include "pxr/base/work/workTBB/threadLimits_impl.h"
 #include "pxr/base/work/workTBB/withScopedParallelism_impl.h"
 
+#include "pxr/pxr.h"
+#if PXR_USE_NAMESPACES
+#define WORK_IMPL_NS PXR_NS
+#endif
+
 #endif // PXR_BASE_WORK_TBB_IMPL_H

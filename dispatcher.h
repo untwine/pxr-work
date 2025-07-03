@@ -171,7 +171,9 @@ private:
 /// Additionally, Wait() must never be called by a task added by Run(), since
 /// that task could never complete.
 ///
-class WorkDispatcher : public Work_Dispatcher<WorkImpl_Dispatcher> {};
+class WorkDispatcher 
+    : public Work_Dispatcher<PXR_WORK_IMPL_NS::WorkImpl_Dispatcher>
+{};
 
 // Wrapper class for non-const tasks.
 template <class Fn>
