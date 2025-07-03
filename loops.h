@@ -13,6 +13,8 @@
 #include "pxr/base/work/impl.h"
 #include "pxr/base/work/threadLimits.h"
 
+#include <algorithm>
+
 PXR_NAMESPACE_OPEN_SCOPE
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -103,7 +105,11 @@ inline void
 WorkParallelForEach(
     InputIterator first, InputIterator last, Fn &&fn)
 {
-    WorkImpl_ParallelForEach(first, last, std::forward<Fn>(fn));
+    if (WorkHasConcurrency()) {
+        WorkImpl_ParallelForEach(first, last, std::forward<Fn>(fn));
+    } else {
+        std::for_each(first, last, std::forward<Fn>(fn));
+    }
 }
 
 PXR_NAMESPACE_CLOSE_SCOPE
