@@ -37,6 +37,7 @@ public:
 
     template <typename F>
     inline void RunTask(F * task) {
+        task->_SetTaskGraph(this);
         _dispatcher.Run(std::ref(*task));
     }
 
@@ -54,7 +55,8 @@ public:
 
     /// Callable operator that implements continuation passing, recycling, and 
     /// scheduler bypass. 
-    WORK_API void operator()() const;
+    WORK_API void operator()(const int depth = 0, 
+        WorkTaskGraph_DefaultImpl * const taskGraph = nullptr) const;
 
     virtual BaseTask * execute() = 0;
 
@@ -79,10 +81,10 @@ public:
 
 protected:
     template <typename C, typename... Args>
-    C * _AllocateContinuation(int ref, Args&&... args) {
+    C * _AllocateContinuation(int refCount, Args&&... args) {
         C* continuation = new C{std::forward<Args>(args)...};
         continuation->_ResetParent(_ResetParent());
-        continuation->_childCount = ref;
+        continuation->_childCount = refCount;
         return continuation;
     }
 
@@ -97,6 +99,9 @@ protected:
     }
 
 private:
+    // Befriend the task graph that owns instances of this class. 
+    friend class WorkTaskGraph_DefaultImpl;
+
     // Allocates a child of this task. 
     template <typename F, typename... Args>
     F* _AllocateChildImpl(Args&&... args) {
@@ -111,6 +116,15 @@ private:
         _parent = ptr;
         return p;
     }
+
+    // Set the back-pointer to this task's owning task graph. 
+    void _SetTaskGraph(WorkTaskGraph_DefaultImpl * const taskGraph) {
+        _taskGraph = taskGraph;
+    }
+
+private:
+    // The task graph that owns this task. 
+    WorkTaskGraph_DefaultImpl * _taskGraph = nullptr;
 
     // The parent/successor of this task. 
     BaseTask * _parent = nullptr;

@@ -90,10 +90,10 @@ public:
 
 protected:
     template <typename C, typename... Args>
-    C * _AllocateContinuation(int ref, Args&&... args) {
+    C * _AllocateContinuation(int refCount, Args&&... args) {
         C* continuation = new (tbb::task::allocate_continuation()) 
             C{std::forward<Args>(args)...};
-        continuation->set_ref_count(ref);
+        continuation->set_ref_count(refCount);
         return continuation;
     }
 

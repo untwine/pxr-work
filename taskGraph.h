@@ -127,8 +127,8 @@ public:
         return _Base::RemoveChildReference();
     }
     
-    /// Construct a new subtask and increment the ref count of the calling 
-    /// task. 
+    /// Construct a new subtask and increment the reference count of the 
+    /// calling task. 
     template <typename F, typename ... Args>
     F * AllocateChild(Args&&... args) {
         return _Base::AllocateChild<F>(std::forward<Args>(args)...);
@@ -143,7 +143,7 @@ public:
     }
 
 protected:
-    /// Allocate a continuation task with \p ref children. 
+    /// Allocate a continuation task with \p refCount children. 
     /// 
     /// Continuation passing provides an alternative to the task-blocking style 
     /// of execution that results from recursively spawning children and 
@@ -155,8 +155,9 @@ protected:
     /// \note Consider continuation passing if reducing the growth of the stack 
     /// is desirable at the cost of growing the heap. 
     template <typename C, typename... Args>
-    C * _AllocateContinuation(int ref, Args&&... args) {
-        return _Base::_AllocateContinuation<C>(ref, std::forward<Args>(args)...);
+    C * _AllocateContinuation(int refCount, Args&&... args) {
+        return _Base::_AllocateContinuation<C>(
+            refCount, std::forward<Args>(args)...);
     }
 
     /// Recycles this as a continuation task to mitigate the allocation 
