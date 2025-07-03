@@ -22,12 +22,13 @@
 #error "TBB version macro TBB_INTERFACE_VERSION_MAJOR not found"
 #endif
 
+#if TBB_INTERFACE_VERSION_MAJOR < 12
+
 // Under legacy TBB we implement the task graph using tbb::task.
 //
 // tbb::task does not exist in oneTBB, so we fall back to WorkTaskGraph's
 // default implementation by not defining the WorkImpl_TaskGraph customization. 
-
-#if TBB_INTERFACE_VERSION_MAJOR < 12
+#define WORK_IMPL_HAS_TASK_GRAPH
 
 #include <tbb/task.h>
 

@@ -14,10 +14,10 @@
 #include "pxr/base/work/taskGraph_defaultImpl.h"
 #include "pxr/base/work/workTBB/impl.h"
 
-#include <type_traits>
+#include <tbb/enumerable_thread_specific.h>
+
 #include <utility>
 #include <vector>
-#include <tbb/enumerable_thread_specific.h>
 
 PXR_NAMESPACE_OPEN_SCOPE
 
@@ -37,17 +37,11 @@ class WorkTaskGraph
 {
 private:
     // Select underlying implementation.
-    template <typename, typename = void>
-    struct _IsDefined
-        : public std::false_type {};
-    
-    template <typename T>
-    struct _IsDefined<T, std::void_t<decltype(sizeof(T))>> 
-        : public std::true_type {};
-
-    using _Impl = std::conditional_t<
-        _IsDefined<class WorkImpl_TaskGraph>::value,
-        WorkImpl_TaskGraph, WorkTaskGraph_DefaultImpl>;
+#if defined WORK_IMPL_HAS_TASK_GRAPH
+    using _Impl = WorkImpl_TaskGraph;
+#else
+    using _Impl = WorkTaskGraph_DefaultImpl;
+#endif
 
 public:
     WorkTaskGraph() = default;
