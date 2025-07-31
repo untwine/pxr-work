@@ -1,14 +1,13 @@
 //
-// Copyright 2016 Pixar
+// Copyright 2025 Pixar
 //
 // Licensed under the terms set forth in the LICENSE.txt file available at
 // https://openusd.org/license.
 //
-
 #include "pxr/pxr.h"
-#include "pxr/base/work/detachedTask.h"
-#include "pxr/base/work/dispatcher.h"
-#include "pxr/base/work/threadLimits.h"
+#include "pxr/base/arch/hints.h"
+
+#include "pxr/base/work/workTBB/detachedTask_impl.h"
 
 #include <atomic>
 #include <chrono>
@@ -16,19 +15,19 @@
 
 PXR_NAMESPACE_OPEN_SCOPE
 
-WorkDispatcher &
-Work_GetDetachedDispatcher()
+static std::atomic<std::thread *> detachedWaiter { nullptr };
+
+WorkImpl_Dispatcher &
+WorkTBB_GetDetachedDispatcher()
 {
     // Deliberately leak this in case there are tasks still using it after we
     // exit from main().
-    static WorkDispatcher *theDispatcher = new WorkDispatcher;
+    static WorkImpl_Dispatcher *theDispatcher = new WorkImpl_Dispatcher;
     return *theDispatcher;
 }
 
-static std::atomic<std::thread *> detachedWaiter { nullptr };
-
 void
-Work_EnsureDetachedTaskProgress()
+WorkTBB_EnsureDetachedTaskProgress()
 {
     // Check to see if there's a waiter thread already.  If not, try to create
     // one.
@@ -37,7 +36,7 @@ Work_EnsureDetachedTaskProgress()
         std::thread *newThread = new std::thread;
         if (detachedWaiter.compare_exchange_strong(c, newThread)) {
             // We won the race, so start the waiter thread.
-            WorkDispatcher &dispatcher = Work_GetDetachedDispatcher();
+            WorkImpl_Dispatcher &dispatcher = WorkTBB_GetDetachedDispatcher();
             *newThread =
                 std::thread([&dispatcher]() {
                         while (true) {
