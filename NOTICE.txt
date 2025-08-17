@@ -1,0 +1,12 @@
+Universal Scene Description
+Copyright 2016 Pixar
+
+All rights reserved.
+
+This product includes software developed at:
+
+Pixar (http://www.pixar.com/).
+
+This repository is a modified, standalone redistribution of the 'work'
+library from Pixar's OpenUSD, restructured for independent building and
+packaging. See the git history for details of the changes made.

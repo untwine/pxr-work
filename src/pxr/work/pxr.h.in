@@ -1,0 +1,51 @@
+// Copyright 2016 Pixar
+//
+// Licensed under the terms set forth in the LICENSE.txt file available at
+// https://openusd.org/license.
+//
+
+#ifndef PXR_WORK_H
+#define PXR_WORK_H
+
+#include <pxr/arch/pxr.h>
+#include <pxr/tf/pxr.h>
+#include <pxr/trace/pxr.h>
+
+#ifdef PXR_PYTHON_SUPPORT_ENABLED
+#include <pxr/boost/python/common.hpp>
+#endif
+
+#define WORK_MAJOR_VERSION @PROJECT_VERSION_MAJOR@
+#define WORK_MINOR_VERSION @PROJECT_VERSION_MINOR@
+#define WORK_PATCH_VERSION @PROJECT_VERSION_PATCH@
+
+#define WORK_VERSION (WORK_MAJOR_VERSION * 10000 \
+                    + WORK_MINOR_VERSION * 100   \
+                    + WORK_PATCH_VERSION)
+
+#define PXR_NS pxr
+#define WORK_INTERNAL_NS pxrInternal_v@PROJECT_VERSION_MAJOR@_@PROJECT_VERSION_MINOR@_@PROJECT_VERSION_PATCH@__pxrReserved__
+#define PXR_NS_GLOBAL ::PXR_NS
+
+namespace WORK_INTERNAL_NS { }
+
+namespace PXR_NS {
+    using namespace WORK_INTERNAL_NS;
+}
+
+// Import direct dependencies into work's internal namespace.
+// This keeps resolution correct if package versions ever drift.
+namespace WORK_INTERNAL_NS {
+    using namespace ARCH_INTERNAL_NS;
+    using namespace TF_INTERNAL_NS;
+    using namespace TRACE_INTERNAL_NS;
+#ifdef PXR_PYTHON_SUPPORT_ENABLED
+    using namespace BOOST_INTERNAL_NS;
+#endif
+}
+
+#define WORK_NAMESPACE_OPEN_SCOPE   namespace WORK_INTERNAL_NS {
+#define WORK_NAMESPACE_CLOSE_SCOPE  }
+#define WORK_NAMESPACE_USING_DIRECTIVE using namespace PXR_NS;
+
+#endif // PXR_WORK_H
