@@ -1,0 +1,122 @@
+name: conan-release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: >-
+      Build for ${{ matrix.os }}
+      (Python ${{ matrix.python || 'none' }})
+    runs-on: ${{ matrix.runs-on }}
+    env:
+      CONAN_REMOTE_NAME: untwine
+      CONAN_REMOTE_URL: https://conan.cloudsmith.io/untwine/conan/
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ linux-intel, linux-arm, windows, macos-intel, macos-arm ]
+        # '' builds pxr-work without Python bindings at all.
+        python: [ '3.10', '3.11', '3.12', '3.13', '3.14', '' ]
+        include:
+          - os: linux-intel
+            runs-on: ubuntu-latest
+          - os: linux-arm
+            runs-on: ubuntu-24.04-arm
+          - os: windows
+            runs-on: windows-latest
+          - os: macos-intel
+            runs-on: macos-15-intel
+          - os: macos-arm
+            runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python || '3.12' }}
+
+      - name: Set up Conan
+        shell: bash
+        run: |
+          pip install conan
+          conan profile detect
+          conan remote add "$CONAN_REMOTE_NAME" "$CONAN_REMOTE_URL" --force
+
+      - name: Create package
+        shell: bash
+        run: |
+          if [ -n "${{ matrix.python }}" ]; then
+            conan create . -o python_version=${{ matrix.python }} --build=missing
+          else
+            conan create . --build=missing
+          fi
+
+      - name: Save package
+        shell: bash
+        run: conan cache save "pxr-work/*:*" --file=package-${{ matrix.os }}-${{ matrix.python || 'none' }}.tgz
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: conan-package-${{ matrix.os }}-${{ matrix.python || 'none' }}
+          path: package-${{ matrix.os }}-${{ matrix.python || 'none' }}.tgz
+
+  upload:
+    name: Review and upload
+    needs: build
+    environment: release
+    runs-on: ubuntu-latest
+    env:
+      CONAN_REMOTE_NAME: untwine
+      CONAN_REMOTE_URL: https://conan.cloudsmith.io/untwine/conan/
+      CONAN_LOGIN_USERNAME: jeremy-retailleau
+
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.x'
+
+      - name: Set up Conan
+        shell: bash
+        run: |
+          pip install conan
+          conan profile detect
+          conan remote add "$CONAN_REMOTE_NAME" "$CONAN_REMOTE_URL" --force
+
+      - uses: actions/download-artifact@v7
+        with:
+          pattern: conan-package-*
+          path: packages
+          merge-multiple: true
+
+      - name: Restore packages into cache
+        shell: bash
+        run: |
+          for f in packages/*.tgz; do
+            conan cache restore "$f"
+          done
+
+      - name: Authenticate to package repository
+        shell: bash
+        env:
+          CONAN_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
+        run: conan remote login "$CONAN_REMOTE_NAME" "$CONAN_LOGIN_USERNAME" -p "$CONAN_API_KEY"
+
+      - name: Upload package
+        shell: bash
+        run: |
+          for attempt in 1 2 3; do
+            if conan upload "pxr-work/*" -r "$CONAN_REMOTE_NAME" -c; then
+              exit 0
+            fi
+            echo "Upload attempt $attempt failed; retrying in 30s..."
+            sleep 30
+          done
+          exit 1
