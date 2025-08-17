@@ -1,0 +1,67 @@
+name: conan-release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build_and_upload:
+    name: >-
+      Build and upload for ${{ matrix.os }}
+      (Python ${{ matrix.python || 'none' }})
+    runs-on: ${{ matrix.runs-on }}
+    env:
+      CONAN_REMOTE_NAME: untwine
+      CONAN_REMOTE_URL: https://packages.untwine-openusd.dev/repository/conan/
+    strategy:
+      matrix:
+        os: [ linux-intel, linux-arm, windows, macos-intel, macos-arm ]
+        # '' builds pxr-work without Python bindings at all.
+        python: [ '3.10', '3.11', '3.12', '3.13', '' ]
+        include:
+          - os: linux-intel
+            runs-on: ubuntu-latest
+          - os: linux-arm
+            runs-on: ubuntu-24.04-arm
+          - os: windows
+            runs-on: windows-latest
+          - os: macos-intel
+            runs-on: macos-15-intel
+          - os: macos-arm
+            runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python || '3.12' }}
+
+      - name: Set up Conan
+        shell: bash
+        run: |
+          pip install conan
+          conan profile detect
+          conan remote add "$CONAN_REMOTE_NAME" "$CONAN_REMOTE_URL" --force
+
+      - name: Create package
+        shell: bash
+        run: |
+          if [ -n "${{ matrix.python }}" ]; then
+            conan create . -o python_version=${{ matrix.python }} --build=missing
+          else
+            conan create . --build=missing
+          fi
+
+      - name: Authenticate to package repository
+        shell: bash
+        env:
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+        run: conan remote login "$CONAN_REMOTE_NAME" github-actions -p "$NEXUS_PASSWORD"
+
+      - name: Upload package
+        shell: bash
+        run: conan upload "pxr-work/*" -r "$CONAN_REMOTE_NAME" -c

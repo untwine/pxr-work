@@ -1,0 +1,50 @@
+name: test-windows
+
+on:
+  push:
+    branches: [ dev, main ]
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  CTEST_OUTPUT_ON_FAILURE: True
+  CONAN_REMOTE_NAME: untwine
+  CONAN_REMOTE_URL: https://packages.untwine-openusd.dev/repository/conan/
+
+  # Avoid the just-in-time debugger where possible when running tests.
+  ARCH_AVOID_JIT: True
+
+jobs:
+  test-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: 3.12
+
+      - name: Set up Conan
+        shell: bash
+        run: |
+          pip install conan
+          conan profile detect
+          conan remote add "$CONAN_REMOTE_NAME" "$CONAN_REMOTE_URL" --force
+
+      - name: Build
+        shell: bash
+        run: >
+          conan build .
+          -o build_tests=True
+          -o precompiled_headers=True
+          -o python_version=3.12
+          --options=*:shared=True
+          -c tools.cmake.cmaketoolchain:generator="Visual Studio 18 2026"
+          --build=missing
+
+      - name: Test
+        run: ctest --preset conan-release -VV -j4 --timeout 3600
