@@ -16,6 +16,7 @@
 
 #include "pxr/base/tf/errorMark.h"
 #include "pxr/base/tf/errorTransport.h"
+#include "pxr/base/tf/mallocTag.h"
 
 #include <functional>
 #include <type_traits>
@@ -102,10 +103,15 @@ private:
     template <class Fn>
     struct _InvokerTask {
         explicit _InvokerTask(Fn &&fn, _ErrorTransports *err) 
-            : _fn(std::move(fn)), _errors(err) {}
+            : _fn(std::move(fn))
+            , _errors(err)
+            , _mallocTagStack(TfMallocTag::GetCurrentStackState())
+            {}
 
         explicit _InvokerTask(Fn const &fn, _ErrorTransports *err) 
-            : _fn(fn), _errors(err) {}
+            : _fn(fn)
+            , _errors(err)
+            , _mallocTagStack(TfMallocTag::GetCurrentStackState()) {}
 
         // Ensure only moves happen, no copies.
         _InvokerTask(_InvokerTask &&other) = default;
@@ -114,6 +120,7 @@ private:
 
         void operator()() const {
             TfErrorMark m;
+            TfMallocTag::StackOverride ovr(_mallocTagStack);
             _fn();
             if (!m.IsClean())
                 Work_Dispatcher::_TransportErrors(m, _errors);
@@ -121,6 +128,7 @@ private:
     private:
         Fn _fn;
         _ErrorTransports *_errors;
+        TfMallocTag::StackState _mallocTagStack;
     };
 
     // Helper function that removes errors from \p m and stores them in a new
