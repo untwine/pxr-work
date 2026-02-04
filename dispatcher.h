@@ -61,9 +61,17 @@ public:
 
     template <class Callable>
     inline void Run(Callable &&c) {
-        _dispatcher.Run(
-            _InvokerTask<typename std::remove_reference<Callable>::type>(
-                std::forward<Callable>(c), &_errors));
+        if (TfMallocTag::IsInitialized()) {
+            _dispatcher.Run(
+                _MallocTagsInvokerTask<
+                typename std::remove_reference<Callable>::type>(
+                    std::forward<Callable>(c), &_errors));
+        }
+        else {
+            _dispatcher.Run(
+                _InvokerTask<typename std::remove_reference<Callable>::type>(
+                    std::forward<Callable>(c), &_errors));
+        }
     }
 
     template <class Callable, class A0, class ... Args>
@@ -104,19 +112,50 @@ private:
     struct _InvokerTask {
         explicit _InvokerTask(Fn &&fn, _ErrorTransports *err) 
             : _fn(std::move(fn))
-            , _errors(err)
-            , _mallocTagStack(TfMallocTag::GetCurrentStackState())
-            {}
+            , _errors(err) {}
 
         explicit _InvokerTask(Fn const &fn, _ErrorTransports *err) 
             : _fn(fn)
-            , _errors(err)
-            , _mallocTagStack(TfMallocTag::GetCurrentStackState()) {}
+            , _errors(err) {}
 
         // Ensure only moves happen, no copies.
         _InvokerTask(_InvokerTask &&other) = default;
         _InvokerTask(const _InvokerTask &other) = delete;
         _InvokerTask &operator=(const _InvokerTask &other) = delete;
+
+        void operator()() const {
+            TfErrorMark m;
+            _fn();
+            if (!m.IsClean())
+                Work_Dispatcher::_TransportErrors(m, _errors);
+        }
+    private:
+        Fn _fn;
+        _ErrorTransports *_errors;
+    };
+
+    // Function invoker helper that wraps the invocation with an ErrorMark so we
+    // can transmit errors that occur back to the thread that Wait() s for tasks
+    // to complete.  This version also duplicates the caller's malloc tag stack
+    // to the callee's thread.
+    template <class Fn>
+    struct _MallocTagsInvokerTask {
+        explicit _MallocTagsInvokerTask(Fn &&fn, _ErrorTransports *err) 
+            : _fn(std::move(fn))
+            , _errors(err)
+            , _mallocTagStack(TfMallocTag::GetCurrentStackState())
+            {}
+
+        explicit _MallocTagsInvokerTask(Fn const &fn, _ErrorTransports *err) 
+            : _fn(fn)
+            , _errors(err)
+            , _mallocTagStack(TfMallocTag::GetCurrentStackState()) {}
+
+        // Ensure only moves happen, no copies.
+        _MallocTagsInvokerTask(_MallocTagsInvokerTask &&other) = default;
+        _MallocTagsInvokerTask(const _MallocTagsInvokerTask &other) = delete;
+        _MallocTagsInvokerTask &
+        operator=(const _MallocTagsInvokerTask &other) = delete;
 
         void operator()() const {
             TfErrorMark m;

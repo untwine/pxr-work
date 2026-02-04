@@ -31,6 +31,31 @@ public:
         Fn &&callback,
         Work_ErrorTransports *errors)
     : _callback(callback)
+    , _errors(errors) {}
+
+    template <typename ... Args>
+    void operator()(Args&&... args) const {
+        TfErrorMark m;
+        _callback(std::forward<Args>(args)...);
+        if (!m.IsClean()) {
+            TfErrorTransport transport = m.Transport();
+            _errors->grow_by(1)->swap(transport);
+        }
+    }
+
+private:
+    Fn & _callback;
+    Work_ErrorTransports *_errors;
+};
+
+template <class Fn>
+class Work_MallocTagsLoopsTaskWrapper
+{
+public:
+    Work_MallocTagsLoopsTaskWrapper(
+        Fn &&callback,
+        Work_ErrorTransports *errors)
+    : _callback(callback)
     , _errors(errors)
     , _mallocTagStack(TfMallocTag::GetCurrentStackState()) {}
 
@@ -56,6 +81,31 @@ class Work_LoopsForEachTaskWrapper
 {
 public:
     Work_LoopsForEachTaskWrapper(
+        Fn &&callback,
+        Work_ErrorTransports *errors)
+    : _callback(callback)
+    , _errors(errors) {}
+
+    template <typename Arg>
+    void operator()(Arg &&arg) const {
+        TfErrorMark m;
+        _callback(std::forward<Arg>(arg));
+        if (!m.IsClean()) {
+            TfErrorTransport transport = m.Transport();
+            _errors->grow_by(1)->swap(transport);
+        }
+    }
+
+private:
+    Fn & _callback;
+    Work_ErrorTransports *_errors;
+};
+
+template <class Fn>
+class Work_MallocTagsLoopsForEachTaskWrapper
+{
+public:
+    Work_MallocTagsLoopsForEachTaskWrapper(
         Fn &&callback,
         Work_ErrorTransports *errors)
     : _callback(callback)
@@ -124,9 +174,17 @@ WorkParallelForN(size_t n, Fn &&callback, size_t grainSize)
     if (WorkHasConcurrency()) {
         PXR_WORK_IMPL_NAMESPACE_USING_DIRECTIVE;
         Work_ErrorTransports errorTransports;
-        Work_LoopsTaskWrapper<Fn>
-            task(std::forward<Fn>(callback), &errorTransports);
-        WorkImpl_ParallelForN(n, task, grainSize);
+        if (TfMallocTag::IsInitialized()) {
+            Work_MallocTagsLoopsTaskWrapper<Fn>
+                task(std::forward<Fn>(callback), &errorTransports);
+            WorkImpl_ParallelForN(n, task, grainSize);
+        }
+        else {
+            Work_LoopsTaskWrapper<Fn>
+                task(std::forward<Fn>(callback), &errorTransports);
+            WorkImpl_ParallelForN(n, task, grainSize);
+        }
+
         for (auto &et: errorTransports) {
             et.Post();
         }
@@ -179,9 +237,16 @@ WorkParallelForTBBRange(const RangeType &range, Fn &&callback)
         // dispatcher.
 #if defined WORK_IMPL_HAS_PARALLEL_FOR_TBB_RANGE
         Work_ErrorTransports errorTransports;
-        Work_LoopsTaskWrapper<Fn>
-            task(std::forward<Fn>(callback), &errorTransports);
-        WorkImpl_ParallelForTBBRange(range, task);
+        if (TfMallocTag::IsInitialized()) {
+            Work_MallocTagsLoopsTaskWrapper<Fn>
+                task(std::forward<Fn>(callback), &errorTransports);
+            WorkImpl_ParallelForTBBRange(range, task);
+        }
+        else {
+            Work_LoopsTaskWrapper<Fn>
+                task(std::forward<Fn>(callback), &errorTransports);
+            WorkImpl_ParallelForTBBRange(range, task);
+        }
         for (auto &et: errorTransports) {
             et.Post();
         }
@@ -253,9 +318,16 @@ WorkParallelForEach(
     if (WorkHasConcurrency()) {
         PXR_WORK_IMPL_NAMESPACE_USING_DIRECTIVE;
         Work_ErrorTransports errorTransports;
-        Work_LoopsForEachTaskWrapper<Fn>
-            task(std::forward<Fn>(fn), &errorTransports);
-        WorkImpl_ParallelForEach(first, last, task);
+        if (TfMallocTag::IsInitialized()) {
+            Work_MallocTagsLoopsForEachTaskWrapper<Fn>
+                task(std::forward<Fn>(fn), &errorTransports);
+            WorkImpl_ParallelForEach(first, last, task);
+        }
+        else {
+            Work_LoopsForEachTaskWrapper<Fn>
+                task(std::forward<Fn>(fn), &errorTransports);
+            WorkImpl_ParallelForEach(first, last, task);
+        }
         for (auto &et: errorTransports) {
             et.Post();
         }
